@@ -29,3 +29,10 @@ jobs:
         name: jmeter-reports
         path: reports
         if-no-files-found: error
+        
+              - name: Upload a Build Artifact
+                uses: actions/upload-artifact@v4.3.3
+            
+
+
+
