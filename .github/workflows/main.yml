@@ -17,7 +17,7 @@ jobs:
         args: "-e -o ./reports/html/"
         
     - name: Upload Results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.3.3
       with:
         name: jmeter-results
         path: result.jtl
@@ -29,9 +29,6 @@ jobs:
         name: jmeter-reports
         path: reports
         if-no-files-found: error
-        
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v4.3.3
             
 
 
