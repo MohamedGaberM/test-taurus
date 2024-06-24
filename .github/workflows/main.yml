@@ -11,20 +11,28 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
-      
+        uses: actions/checkout@v2
+
       - name: Set up Java
         uses: actions/setup-java@v4.2.1
         with:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Install PerfAction
+      - name: Install dependencies
+        run: sudo apt-get install -y build-essential git
+
+      - name: Clone PerfAction repository
+        run: git clone https://github.com/example/perfaction.git /tmp/perfaction
+
+      - name: Build PerfAction
         run: |
-          wget https://path/to/perfaction-binary -O /tmp/perfaction
-          chmod +x /tmp/perfaction
-          sudo mv /tmp/perfaction /usr/local/bin/perfaction
-      
+          cd /tmp/perfaction
+          ./build.sh  # or the relevant build command
+
+      - name: Move PerfAction binary
+        run: sudo mv /tmp/perfaction/bin/perfaction /usr/local/bin/perfaction
+
       - name: Run PerfAction
         run: |
           perfaction run --config config/perfaction-config.yml
