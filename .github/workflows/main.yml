@@ -1,38 +1,31 @@
-name: PerfAction Test
-
-on:
-  push:
-    branches:
-      - main  # adjust as needed
-
+on: [push]
 jobs:
-  performance-test:
+  jmeter_job:
     runs-on: ubuntu-latest
+    name: JMeter Test Execution
+    steps:      
+    - name: Checkout
+      uses: actions/checkout@v4
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Create reports directory
+      run: mkdir reports
+      
+    - name: Run JMeter Tests
+      uses: ./
+      with:
+        config-path: ./TestPlans/config.yml
+        args: "-e -o ./reports/html/"
+        
+    - name: Upload Results
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: jmeter-results
+        path: result.jtl
+        if-no-files-found: error
 
-      - name: Set up Java
-        uses: actions/setup-java@v4.2.1
-        with:
-          java-version: '11'
-          distribution: 'adopt'
-
-      - name: Install dependencies
-        run: sudo apt-get install -y build-essential git
-
-      - name: Clone PerfAction repository
-        run: git clone https://github.com/example/perfaction.git /tmp/perfaction
-
-      - name: Build PerfAction
-        run: |
-          cd /tmp/perfaction
-          ./build.sh  # or the relevant build command
-
-      - name: Move PerfAction binary
-        run: sudo mv /tmp/perfaction/bin/perfaction /usr/local/bin/perfaction
-
-      - name: Run PerfAction
-        run: |
-          perfaction run --config config/perfaction-config.yml
+    - name: Upload HTML Reports
+      uses: actions/upload-artifact@v4.3.3
+      with:
+        name: jmeter-reports
+        path: reports
+        if-no-files-found: error
