@@ -1,0 +1,13 @@
+# perfaction-config.yml
+
+tests:
+  - name: "Homepage Load Test"
+    url: "https://website-api.testing.kafrelmatloob.com/api/properties\"
+    duration: 300  # seconds
+    concurrency: 50
+    assertions:
+      - metric: "response_time_avg"
+        threshold: 500  # ms
+    report:
+      format: "json"
+      path: "/path/to/reports"
