@@ -18,6 +18,12 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
+
+      - name: Install PerfAction
+        run: |
+          wget https://path/to/perfaction-binary -O /tmp/perfaction
+          chmod +x /tmp/perfaction
+          sudo mv /tmp/perfaction /usr/local/bin/perfaction
       
       - name: Run PerfAction
         run: |
