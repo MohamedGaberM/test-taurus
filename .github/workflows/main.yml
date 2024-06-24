@@ -1,35 +1,23 @@
-on: [push]
+name: PerfAction Test
+
+on:
+  push:
+    branches:
+      - main  # adjust as needed
+
 jobs:
-  jmeter_job:
+  performance-test:
     runs-on: ubuntu-latest
-    name: JMeter Test Execution
-    steps:      
-    - name: Checkout
-      uses: actions/checkout@v4
 
-    - name: Create reports directory
-      run: mkdir reports
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
-    - name: Run JMeter Tests
-      uses: ./
-      with:
-        test-plan-path: ./TestPlans/S01_SimpleExample/Test_get_properties.jmx
-        args: "-e -o ./reports/html/"
-        
-    - name: Upload Results
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: jmeter-results
-        path: result.jtl
-        if-no-files-found: error
+      - name: Set up Java
+        uses: actions/setup-java@v4.2.1
+        with:
+          java-version: '11'
 
-    - name: Upload HTML Reports
-      uses: actions/upload-artifact@v4.3.3
-      with:
-        name: jmeter-reports
-        path: reports
-        if-no-files-found: error
-            
-
-
-
+      - name: Run PerfAction
+        run: |
+          perfaction run --config config/perfaction-config.yml
